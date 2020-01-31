@@ -5,12 +5,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private Button leftButton, bottomButton, rightButton, topButton, flyToButton;
-    private TextView longitude, lattitude;
+    private TextView longitude, lattitude, altitudeIndicator;
+    private SeekBar altitudeController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,6 +22,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void linkViewObjects() {
+        longitude = findViewById(R.id.longitude);
+        lattitude = findViewById(R.id.lattitude);
+        altitudeIndicator = findViewById(R.id.altitudeIndicator);
         leftButton = findViewById(R.id.leftButton);
         leftButton.setOnClickListener(this);
         bottomButton = findViewById(R.id.bottomButton);
@@ -30,8 +35,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         topButton.setOnClickListener(this);
         flyToButton = findViewById(R.id.flyToButton);
         flyToButton.setOnClickListener(this);
-    }
+        altitudeController = findViewById(R.id.altitudeController);
+        altitudeController.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                Toast.makeText(getApplicationContext(), "Envoyer Altitude", Toast.LENGTH_SHORT).show();
+            }
 
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                // TODO Auto-generated method stub
+            }
+
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress,boolean fromUser) {
+                altitudeIndicator.setText(String.valueOf(progress) + "m");
+
+
+            }
+
+        });
+    }
 
     @Override
     public void onClick(View v) {
