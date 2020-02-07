@@ -17,7 +17,7 @@ import java.net.UnknownHostException;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private Button leftButton, bottomButton, rightButton, topButton, flyToButton;
-    private TextView longitude, lattitude, altitudeIndicator;
+    private TextView x, y, z, altitudeIndicator;
     private SeekBar altitudeController;
     private final String HOST = "";
     private Socket socket;
@@ -58,8 +58,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void linkViewObjects() {
-        longitude = findViewById(R.id.longitude);
-        lattitude = findViewById(R.id.lattitude);
+        // Position
+        x = findViewById(R.id.x);
+        y = findViewById(R.id.y);
+        z = findViewById(R.id.z);
+
         altitudeIndicator = findViewById(R.id.altitudeIndicator);
         leftButton = findViewById(R.id.leftButton);
         leftButton.setOnClickListener(this);
@@ -86,7 +89,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress,boolean fromUser) {
                 altitudeIndicator.setText(String.valueOf(progress) + "m");
-
 
             }
 
