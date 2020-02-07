@@ -9,16 +9,52 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.Socket;
+import java.net.UnknownHostException;
+
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private Button leftButton, bottomButton, rightButton, topButton, flyToButton;
     private TextView longitude, lattitude, altitudeIndicator;
     private SeekBar altitudeController;
+    private final String HOST = "";
+    private Socket socket;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         linkViewObjects();
+
+        try {
+            connection();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
+    @Override
+    protected void onDestroy(){
+        super.onDestroy();
+        try {
+            socket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private void connection() throws IOException {
+        socket= new Socket(HOST, 7778);
+        DataOutputStream output = new DataOutputStream((socket.getOutputStream()));
+        DataInputStream input = new DataInputStream((socket.getInputStream()));
+
+
+
     }
 
     private void linkViewObjects() {
@@ -63,6 +99,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (v.getId()) {
             case R.id.leftButton:
                 buttonPressed = "Gauche";
+
                 break;
             case R.id.bottomButton:
                 buttonPressed = "Arrière";
