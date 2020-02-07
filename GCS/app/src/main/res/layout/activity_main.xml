@@ -10,7 +10,7 @@
         android:id="@+id/title"
         android:layout_width="88dp"
         android:layout_height="43dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="28dp"
         android:text="@string/gcs"
         android:textAlignment="center"
         android:textColor="#000000"
@@ -76,33 +76,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="12dp"
         android:text="Envoyer"
-        app:layout_constraintStart_toEndOf="@+id/lattitude"
-        app:layout_constraintTop_toBottomOf="@+id/longitude" />
-
-    <EditText
-        android:id="@+id/longitude"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="48dp"
-        android:ems="10"
-        android:hint="N:000:00:00"
-        android:inputType="textPersonName"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/bottomButton" />
-
-    <EditText
-        android:id="@+id/lattitude"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:ems="10"
-        android:hint="E:000:00:00"
-        android:inputType="textPersonName"
-        app:layout_constraintStart_toStartOf="@+id/longitude"
-        app:layout_constraintTop_toBottomOf="@+id/longitude" />
+        app:layout_constraintStart_toEndOf="@+id/y"
+        app:layout_constraintTop_toBottomOf="@+id/y" />
 
     <SeekBar
         android:id="@+id/altitudeController"
@@ -112,7 +88,8 @@
         android:rotation="270"
         app:layout_constraintBottom_toBottomOf="@+id/bottomButton"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/title" />
+        app:layout_constraintTop_toBottomOf="@+id/title"
+        app:layout_constraintVertical_bias="0.533" />
 
     <TextView
         android:id="@+id/altitudeIndicator"
@@ -123,5 +100,41 @@
         app:layout_constraintEnd_toEndOf="@+id/altitudeController"
         app:layout_constraintStart_toStartOf="@+id/altitudeController"
         app:layout_constraintTop_toBottomOf="@+id/altitudeController" />
+
+    <EditText
+        android:id="@+id/x"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="32dp"
+        android:ems="10"
+        android:hint="x : 0"
+        android:inputType="numberSigned"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/bottomButton" />
+
+    <EditText
+        android:id="@+id/y"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:hint="y : 0"
+        android:inputType="numberSigned"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/x" />
+
+    <EditText
+        android:id="@+id/z"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        android:ems="10"
+        android:hint="z : 0 "
+        android:inputType="numberSigned"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/y" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
