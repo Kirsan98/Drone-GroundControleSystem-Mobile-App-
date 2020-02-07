@@ -21,6 +21,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private SeekBar altitudeController;
     private final String HOST = "";
     private Socket socket;
+    private DataOutputStream output;
+    private Instruction lastInstruction;
+    private int nbMessages =0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +53,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void connection() throws IOException {
         socket= new Socket(HOST, 7778);
-        DataOutputStream output = new DataOutputStream((socket.getOutputStream()));
+        output = new DataOutputStream((socket.getOutputStream()));
         DataInputStream input = new DataInputStream((socket.getInputStream()));
 
 
@@ -97,25 +100,52 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-        String buttonPressed = "";
-        switch (v.getId()) {
-            case R.id.leftButton:
-                buttonPressed = "Gauche";
 
-                break;
-            case R.id.bottomButton:
-                buttonPressed = "Arrière";
-                break;
-            case R.id.rightButton:
-                buttonPressed = "Droite";
-                break;
-            case R.id.topButton:
-                buttonPressed = "Avant";
-                break;
-            case R.id.flyToButton:
-                buttonPressed = "Voler vers";
-                break;
+        try {
+
+            String message ="";
+            switch (v.getId()) {
+                case R.id.leftButton:
+                    lastInstruction = new Instruction(0,0,0,false,true,false,false, false);
+
+                    break;
+                case R.id.bottomButton:
+                    lastInstruction = new Instruction(0,0,0,false,false,false,true, false);
+                    break;
+                case R.id.rightButton:
+                    lastInstruction = new Instruction(0,0,0,true,false,false,false, false);
+                    break;
+                case R.id.topButton:
+                    lastInstruction = new Instruction(0,0,0,false,false,true,false, false);
+                    break;
+                case R.id.flyToButton:
+                    if (x.getText()!=null && y.getText()!=null && z.getText()!=null && !x.getText().toString().isEmpty() && !y.getText().toString().isEmpty() && !z.getText().toString().isEmpty()){
+
+                        int valX = Integer.parseInt(x.getText().toString());
+                        int valY = Integer.parseInt(y.getText().toString());
+                        int valZ = Integer.parseInt(z.getText().toString());
+
+                        lastInstruction = new Instruction(valX,valY,valZ,false,false,false,false, true);
+                    }
+                    break;
+            }
+
+            if (lastInstruction!=null)
+                Toast.makeText(this,lastInstruction.getJSON().toString(), Toast.LENGTH_LONG).show();
+
+            if (!message.isEmpty() && output!=null){
+                message = lastInstruction.getJSON().toString();
+                output.writeBytes(message);
+                Toast.makeText(this,"Coordonnées envoyées", Toast.LENGTH_SHORT).show();
+            }
+            else {
+                Toast.makeText(this,"connexion impossible", Toast.LENGTH_SHORT).show();
+            }
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        Toast.makeText(this, "Bouton " + buttonPressed, Toast.LENGTH_SHORT).show();
     }
+
 }
