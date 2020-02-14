@@ -10,13 +10,19 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-public class MainActivity extends AppCompatActivity implements View.OnTouchListener {
+public class MainActivity extends AppCompatActivity implements View.OnTouchListener{
     private Button leftButton, bottomButton, rightButton, topButton, flyToButton;
     private TextView x, y, z, altitudeIndicator;
     private SeekBar altitudeController;
@@ -25,7 +31,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     private DataOutputStream output;
     private Instruction lastInstruction;
     private int nbMessages =0;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,9 +61,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         socket= new Socket(HOST, 7778);
         output = new DataOutputStream((socket.getOutputStream()));
         DataInputStream input = new DataInputStream((socket.getInputStream()));
-
-
-
+        output.writeBytes("GCS");
     }
 
     private void linkViewObjects() {
@@ -159,6 +162,4 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         }
         return false;
     }
-
-
 }
