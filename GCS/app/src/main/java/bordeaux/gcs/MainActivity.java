@@ -3,6 +3,7 @@ package bordeaux.gcs;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.SeekBar;
@@ -15,7 +16,7 @@ import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements View.OnTouchListener {
     private Button leftButton, bottomButton, rightButton, topButton, flyToButton;
     private TextView x, y, z, altitudeIndicator;
     private SeekBar altitudeController;
@@ -68,15 +69,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         altitudeIndicator = findViewById(R.id.altitudeIndicator);
         leftButton = findViewById(R.id.leftButton);
-        leftButton.setOnClickListener(this);
+        leftButton.setOnTouchListener(this);
         bottomButton = findViewById(R.id.bottomButton);
-        bottomButton.setOnClickListener(this);
+        bottomButton.setOnTouchListener(this);
         rightButton = findViewById(R.id.rightButton);
-        rightButton.setOnClickListener(this);
+        rightButton.setOnTouchListener(this);
         topButton = findViewById(R.id.topButton);
-        topButton.setOnClickListener(this);
+        topButton.setOnTouchListener(this);
         flyToButton = findViewById(R.id.flyToButton);
-        flyToButton.setOnClickListener(this);
+        flyToButton.setOnTouchListener(this);
         altitudeController = findViewById(R.id.altitudeController);
         altitudeController.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -99,24 +100,34 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
-    public void onClick(View v) {
-
+    public boolean onTouch(View v, MotionEvent event) {
         try {
 
             String message ="";
             switch (v.getId()) {
                 case R.id.leftButton:
-                    lastInstruction = new Instruction(0,0,0,false,true,false,false, false);
-
+                    if (event.getAction()==MotionEvent.ACTION_DOWN)
+                        lastInstruction = new Instruction(0,0,0,false,true,false,false, false);
+                    else
+                        lastInstruction = new Instruction(0,0,0,false,false,false,false, false);
                     break;
                 case R.id.bottomButton:
-                    lastInstruction = new Instruction(0,0,0,false,false,false,true, false);
+                    if (event.getAction()==MotionEvent.ACTION_DOWN)
+                        lastInstruction = new Instruction(0,0,0,false,false,false,true, false);
+                    else
+                        lastInstruction = new Instruction(0,0,0,false,false,false,false, false);
                     break;
                 case R.id.rightButton:
-                    lastInstruction = new Instruction(0,0,0,true,false,false,false, false);
+                    if (event.getAction()==MotionEvent.ACTION_DOWN)
+                        lastInstruction = new Instruction(0,0,0,true,false,false,false, false);
+                    else
+                        lastInstruction = new Instruction(0,0,0,false,false,false,false, false);
                     break;
                 case R.id.topButton:
-                    lastInstruction = new Instruction(0,0,0,false,false,true,false, false);
+                    if (event.getAction()==MotionEvent.ACTION_DOWN)
+                        lastInstruction = new Instruction(0,0,0,false,false,true,false, false);
+                    else
+                        lastInstruction = new Instruction(0,0,0,false,false,false,false, false);
                     break;
                 case R.id.flyToButton:
                     if (x.getText()!=null && y.getText()!=null && z.getText()!=null && !x.getText().toString().isEmpty() && !y.getText().toString().isEmpty() && !z.getText().toString().isEmpty()){
@@ -146,6 +157,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return false;
     }
+
 
 }

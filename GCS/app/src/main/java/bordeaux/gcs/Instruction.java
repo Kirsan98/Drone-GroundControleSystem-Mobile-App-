@@ -4,13 +4,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class Instruction {
-    private int x,y,z;
+    private float x,y,z;
     private boolean buttonRightPressed, buttonLeftPressed,buttonTopPressed,buttonBotPressed, isNewPosition;
     private int id;
-    private int TTL;
     private static int idMessage=-1;
 
-    public Instruction(int x, int y, int z, boolean buttonRightPressed, boolean buttonLeftPressed, boolean buttonTopPressed, boolean buttonBotPressed, boolean isNewPosition) {
+    public Instruction(float x, float y, float z, boolean buttonRightPressed, boolean buttonLeftPressed, boolean buttonTopPressed, boolean buttonBotPressed, boolean isNewPosition) {
         this.x = x;
         this.y = y;
         this.z = z;
@@ -20,14 +19,12 @@ public class Instruction {
         this.buttonBotPressed = buttonBotPressed;
         this.id = idMessage+1;
         this.isNewPosition = isNewPosition;
-        this.TTL=0;
     }
 
     JSONObject getJSON() {
         JSONObject obj = new JSONObject();
         try {
             obj.put("id",id);
-            obj.put("TTL",TTL);
             obj.put("x",x);
             obj.put("y",y);
             obj.put("z",z);
@@ -58,7 +55,7 @@ public class Instruction {
         Instruction.idMessage = idMessage;
     }
 
-    public int getX() {
+    public float getX() {
         return x;
     }
 
@@ -66,7 +63,7 @@ public class Instruction {
         this.x = x;
     }
 
-    public int getY() {
+    public float getY() {
         return y;
     }
 
@@ -74,7 +71,7 @@ public class Instruction {
         this.y = y;
     }
 
-    public int getZ() {
+    public float getZ() {
         return z;
     }
 
@@ -120,13 +117,5 @@ public class Instruction {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public int getTTL() {
-        return TTL;
-    }
-
-    public void setTTL(int TTL) {
-        this.TTL = TTL;
     }
 }
