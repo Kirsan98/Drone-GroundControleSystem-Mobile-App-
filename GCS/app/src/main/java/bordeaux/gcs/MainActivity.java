@@ -21,7 +21,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     private Button leftButton, bottomButton, rightButton, topButton, flyToButton;
     private TextView x, y, z, altitudeIndicator;
     private SeekBar altitudeController;
-    private final String HOST = "";
+    private final String HOST = ""; //petitbonum
     private Socket socket;
     private DataOutputStream output;
     private Instruction lastInstruction;
@@ -148,7 +148,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 Toast.makeText(this,"Coordonnées envoyées", Toast.LENGTH_SHORT).show();
             }
             else {
-                Toast.makeText(this,"connexion impossible", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(this,"connexion impossible", Toast.LENGTH_SHORT).show();
             }
 
 

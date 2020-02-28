@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">droneGCS_M</string>
+    <string name="title_activity_maps">Map</string>
+</resources>
