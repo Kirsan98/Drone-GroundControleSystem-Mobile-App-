@@ -2,6 +2,7 @@ package fr.b.dronegcs_m;
 
 import androidx.fragment.app.FragmentActivity;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
@@ -19,6 +20,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolygonOptions;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -116,6 +118,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap = googleMap;
         LatLng homePosition = new LatLng(44.804, -0.606);
         LatLng dronePosition = new LatLng(44.8037, -0.6057);
+        LatLng flyAreaTopLeft = new LatLng(44.8045, -0.6065);
+        LatLng flyAreaTopRight = new LatLng(44.8045, -0.6055);
+        LatLng flyAreaBotLeft = new LatLng(44.8035, -0.6065);
+        LatLng flyAreaBotRight = new LatLng(44.8035, -0.6055);
 
 
 
@@ -127,6 +133,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         moDRONE.position(dronePosition).title("Drone");
         moDRONE.icon(BitmapDescriptorFactory.fromResource(R.drawable.drone));
         mMap.addMarker(moDRONE);
+
+        PolygonOptions rectOptions = new PolygonOptions();
+        rectOptions.fillColor(Color.argb(80,0,200,100));
+        rectOptions.strokeWidth(0);
+        rectOptions.add(flyAreaTopLeft);
+        rectOptions.add(flyAreaTopRight);
+        rectOptions.add(flyAreaBotRight);
+        rectOptions.add(flyAreaBotLeft);
+
+        googleMap.addPolygon(rectOptions);
 
 
         mMap.moveCamera(CameraUpdateFactory.newLatLng(homePosition));
