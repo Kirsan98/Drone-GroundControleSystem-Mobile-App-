@@ -8,6 +8,9 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -38,10 +41,23 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        LatLng homePosition = new LatLng(44.804, -0.606);
+        LatLng dronePosition = new LatLng(44.8037, -0.6057);
 
-        // Add a marker in Sydney and move the camera
-        LatLng bordeaux = new LatLng(44.804, -0.61);
-        mMap.addMarker(new MarkerOptions().position(bordeaux).title("Home"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(bordeaux));
+
+
+        MarkerOptions moHOME = new MarkerOptions();
+        moHOME.position(homePosition).title("Home");
+        mMap.addMarker(moHOME);
+
+        MarkerOptions moDRONE = new MarkerOptions();
+        moDRONE.position(dronePosition).title("Drone");
+        moDRONE.icon(BitmapDescriptorFactory.fromResource(R.drawable.drone));
+        mMap.addMarker(moDRONE);
+
+
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(homePosition));
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(homePosition, 18.0f));
+        mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
     }
 }
