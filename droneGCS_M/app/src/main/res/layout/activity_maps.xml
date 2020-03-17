@@ -54,29 +54,25 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:baselineAligned="false">
+        android:orientation="horizontal">
 
         <fr.b.dronegcs_m.JoystickView
             android:id="@+id/joystickLeft"
-            android:layout_width="315dp"
-            android:layout_height="match_parent"
-            android:layout_marginTop="268dp"
-            android:layout_weight="1" />
+            android:layout_width="150dp"
+            android:layout_height="match_parent" />
 
         <fragment
             android:id="@+id/map"
             android:name="com.google.android.gms.maps.SupportMapFragment"
-            android:layout_width="546dp"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="2"
             tools:context=".MapsActivity" />
 
         <fr.b.dronegcs_m.JoystickView
             android:id="@+id/joystickRight"
-            android:layout_width="315dp"
-            android:layout_height="92dp"
-            android:layout_marginStart="296dp"
-            android:layout_marginTop="268dp" />
+            android:layout_width="150dp"
+            android:layout_height="match_parent" />
     </LinearLayout>
 
 </LinearLayout>
