@@ -64,27 +64,27 @@ obj/
 /out/
 
 # User-specific configurations
-.idea/caches/
-.idea/libraries/
-.idea/shelf/
-.idea/workspace.xml
-.idea/tasks.xml
-.idea/.name
-.idea/compiler.xml
-.idea/copyright/profiles_settings.xml
-.idea/encodings.xml
-.idea/misc.xml
-.idea/modules.xml
-.idea/scopes/scope_settings.xml
-.idea/dictionaries
-.idea/vcs.xml
-.idea/jsLibraryMappings.xml
-.idea/datasources.xml
-.idea/dataSources.ids
-.idea/sqlDataSources.xml
-.idea/dynamic.xml
-.idea/uiDesigner.xml
-.idea/assetWizardSettings.xml
+droneGCS_M/.idea/caches/
+droneGCS_M/.idea/libraries/
+droneGCS_M/.idea/shelf/
+droneGCS_M/.idea/workspace.xml
+droneGCS_M/.idea/tasks.xml
+droneGCS_M/.idea/.name
+droneGCS_M/.idea/compiler.xml
+droneGCS_M/.idea/copyright/profiles_settings.xml
+droneGCS_M/.idea/encodings.xml
+droneGCS_M/.idea/misc.xml
+droneGCS_M/.idea/modules.xml
+droneGCS_M/.idea/scopes/scope_settings.xml
+droneGCS_M/.idea/dictionaries
+droneGCS_M/.idea/vcs.xml
+droneGCS_M/.idea/jsLibraryMappings.xml
+droneGCS_M/.idea/datasources.xml
+droneGCS_M/.idea/dataSources.ids
+droneGCS_M/.idea/sqlDataSources.xml
+droneGCS_M/.idea/dynamic.xml
+droneGCS_M/.idea/uiDesigner.xml
+droneGCS_M/.idea/assetWizardSettings.xml
 
 # OS-specific files
 .DS_Store
