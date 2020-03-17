@@ -7,10 +7,6 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 
-
-
-
-
 public class thread2 extends Thread{
 
     private Socket socket;

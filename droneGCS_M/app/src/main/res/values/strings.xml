@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">droneGCS_M</string>
     <string name="title_activity_maps">Map</string>
+    <string name="x">x</string>
+    <string name="y">y</string>
+    <string name="z">z</string>
+    <string name="autopilote">Autopilote</string>
+    <string name="takeoff">TakeOff</string>
 </resources>

@@ -19,8 +19,9 @@
             android:layout_width="100dp"
             android:layout_height="match_parent"
             android:ems="10"
-            android:hint="x"
-            android:inputType="numberSigned" />
+            android:hint="@string/x"
+            android:inputType="numberSigned"
+            android:importantForAutofill="no" />
 
         <EditText
             android:id="@+id/y"
@@ -28,110 +29,54 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:ems="10"
-            android:hint="y"
-            android:inputType="numberSigned" />
+            android:hint="@string/y"
+            android:inputType="numberSigned"
+            android:importantForAutofill="no" />
 
         <EditText
             android:id="@+id/z"
-            android:layout_width="100dp"
+            android:layout_width="20dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:ems="10"
-            android:hint="z"
+            android:hint="@string/z"
+            android:importantForAutofill="no"
             android:inputType="numberSigned" />
 
         <Button
-            android:id="@+id/flyToButton"
-            android:layout_width="wrap_content"
+            android:id="@+id/LandOffButton"
+            android:layout_width="33dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="Autopilote" />
+            android:text="@string/takeoff" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal">
+        android:baselineAligned="false">
 
-
-        <SeekBar
-            android:id="@+id/altitudeController"
-            android:layout_width="150dp"
+        <fr.b.dronegcs_m.JoystickView
+            android:id="@+id/joystickLeft"
+            android:layout_width="315dp"
             android:layout_height="match_parent"
-            android:layout_marginTop="16dp"
-            android:rotation="270" />
+            android:layout_marginTop="268dp"
+            android:layout_weight="1" />
 
         <fragment
             android:id="@+id/map"
             android:name="com.google.android.gms.maps.SupportMapFragment"
-            android:layout_width="wrap_content"
+            android:layout_width="546dp"
             android:layout_height="match_parent"
             android:layout_weight="2"
             tools:context=".MapsActivity" />
 
-        <TableLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent">
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <Button
-                    android:id="@+id/topButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="60dp"
-                    android:layout_marginTop="16dp"
-                    android:text="↑"
-                    android:textSize="30sp"
-                    android:textStyle="bold"/>
-
-            </TableRow>
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <Button
-                    android:id="@+id/rightButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="10dp"
-                    android:text="→"
-                    android:textSize="30sp"
-                    android:textStyle="bold"/>
-
-                <Button
-                    android:id="@+id/leftButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginEnd="10dp"
-                    android:text="←"
-                    android:textSize="30sp"
-                    android:textStyle="bold"/>
-
-            </TableRow>
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <Button
-                    android:id="@+id/bottomButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="60dp"
-                    android:layout_marginTop="10dp"
-                    android:text="↓"
-                    android:textSize="30sp"
-                    android:textStyle="bold"/>
-            </TableRow>
-
-        </TableLayout>
-
+        <fr.b.dronegcs_m.JoystickView
+            android:id="@+id/joystickRight"
+            android:layout_width="315dp"
+            android:layout_height="92dp"
+            android:layout_marginStart="296dp"
+            android:layout_marginTop="268dp" />
     </LinearLayout>
 
 </LinearLayout>

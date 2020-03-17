@@ -4,6 +4,7 @@ import androidx.fragment.app.FragmentActivity;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -15,9 +16,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolygonOptions;
@@ -27,23 +26,24 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, View.OnTouchListener {
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, View.OnTouchListener,JoystickView.JoystickListener {
 
     private GoogleMap mMap;
-    private Button leftButton, bottomButton, rightButton, topButton, flyToButton;
-    private TextView x, y, z, altitudeIndicator;
-    private SeekBar altitudeController;
+    private Button LandOff;
+    private JoystickView leftJoystick, rightJoystick;
+    private TextView x, y, z;
     private final String HOST = ""; //petitbonum
     private Socket socket;
     private DataOutputStream output;
     private Instruction lastInstruction;
-    private int nbMessages =0;
+    private int nbMessages = 0;
     private thread2 monThread;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+        JoystickView joystick = new JoystickView(this);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -58,8 +58,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             e.printStackTrace();
         }
         */
-
-
     }
     private void connection() throws IOException {
         socket= new Socket(HOST, 7778);
@@ -68,42 +66,39 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         output.writeBytes("GCS");
     }
 
+
+    public void onJoystickMoved(float xPercent, float yPercent, int id) {
+        switch (id) {
+            case R.id.joystickLeft:
+                Log.d("Left Joystick", "X percent: " + xPercent + " Y percent: " + yPercent);
+                break;
+            case R.id.joystickRight:
+                Log.d("Right Joystick", "X percent: " + xPercent + "Y percent: " + yPercent);
+                break;
+        }
+    }
+
+    @Override
+    protected void onDestroy(){
+        super.onDestroy();
+        try {
+            socket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     private void linkViewObjects() {
         // Position
         x = findViewById(R.id.x);
         y = findViewById(R.id.y);
         z = findViewById(R.id.z);
 
-        //altitudeIndicator = findViewById(R.id.altitudeIndicator);
-        leftButton = findViewById(R.id.leftButton);
-        leftButton.setOnTouchListener(this);
-        bottomButton = findViewById(R.id.bottomButton);
-        bottomButton.setOnTouchListener(this);
-        rightButton = findViewById(R.id.rightButton);
-        rightButton.setOnTouchListener(this);
-        topButton = findViewById(R.id.topButton);
-        topButton.setOnTouchListener(this);
-        flyToButton = findViewById(R.id.flyToButton);
-        flyToButton.setOnTouchListener(this);
-        altitudeController = findViewById(R.id.altitudeController);
-        altitudeController.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-                Toast.makeText(getApplicationContext(), "Envoyer Altitude", Toast.LENGTH_SHORT).show();
-            }
+        LandOff = findViewById(R.id.LandOffButton);
+        LandOff.setOnTouchListener(this);
 
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-                // TODO Auto-generated method stub
-            }
-
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress,boolean fromUser) {
-                //altitudeIndicator.setText(String.valueOf(progress) + "m");
-
-            }
-
-        });
+        leftJoystick = findViewById(R.id.joystickLeft);
+        rightJoystick = findViewById(R.id.joystickRight);
     }
 
     /**
@@ -152,50 +147,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
     }
 
-
-    @Override
-    protected void onDestroy(){
-        super.onDestroy();
-        try {
-            if (socket!=null && socket.isConnected())
-                socket.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-    }
-
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         try {
 
             String message ="";
             switch (v.getId()) {
-                case R.id.leftButton:
-                    if (event.getAction()==MotionEvent.ACTION_DOWN)
-                        lastInstruction = new Instruction(0,0,0,false,true,false,false, false);
-                    else
-                        lastInstruction = new Instruction(0,0,0,false,false,false,false, false);
-                    break;
-                case R.id.bottomButton:
-                    if (event.getAction()==MotionEvent.ACTION_DOWN)
-                        lastInstruction = new Instruction(0,0,0,false,false,false,true, false);
-                    else
-                        lastInstruction = new Instruction(0,0,0,false,false,false,false, false);
-                    break;
-                case R.id.rightButton:
-                    if (event.getAction()==MotionEvent.ACTION_DOWN)
-                        lastInstruction = new Instruction(0,0,0,true,false,false,false, false);
-                    else
-                        lastInstruction = new Instruction(0,0,0,false,false,false,false, false);
-                    break;
-                case R.id.topButton:
-                    if (event.getAction()==MotionEvent.ACTION_DOWN)
-                        lastInstruction = new Instruction(0,0,0,false,false,true,false, false);
-                    else
-                        lastInstruction = new Instruction(0,0,0,false,false,false,false, false);
-                    break;
-                case R.id.flyToButton:
+                case R.id.LandOffButton:
                     if (x.getText()!=null && y.getText()!=null && z.getText()!=null && !x.getText().toString().isEmpty() && !y.getText().toString().isEmpty() && !z.getText().toString().isEmpty()){
 
                         int valX = Integer.parseInt(x.getText().toString());
