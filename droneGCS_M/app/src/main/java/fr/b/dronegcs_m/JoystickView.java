@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.PorterDuff;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -22,8 +23,8 @@ public class JoystickView extends SurfaceView implements SurfaceHolder.Callback,
     private void setupDimensions(){
         centerX = getWidth() / 2;
         centerY = getHeight() / 2 ;
-        baseRadius = Math.min(getWidth(),getHeight()) / 6;
-        hatRadius = Math.min(getWidth(),getHeight()) / 10;
+        baseRadius = Math.min(getWidth(),getHeight()) / 4; // /6
+        hatRadius = Math.min(getWidth(),getHeight()) / 7; // /10
     }
 
     public JoystickView(Context context){

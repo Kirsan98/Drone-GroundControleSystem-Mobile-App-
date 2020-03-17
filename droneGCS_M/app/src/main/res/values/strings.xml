@@ -6,4 +6,6 @@
     <string name="z">z</string>
     <string name="autopilote">Autopilote</string>
     <string name="takeoff">TakeOff</string>
+    <string name="atterrissage">Atterrissage</string>
+    <string name="d_collage">Décollage</string>
 </resources>

@@ -29,7 +29,7 @@ import java.net.Socket;
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, View.OnTouchListener,JoystickView.JoystickListener {
 
     private GoogleMap mMap;
-    private Button LandOff;
+    private Button flyTo, takeOff, landing;
     private JoystickView leftJoystick, rightJoystick;
     private TextView x, y, z;
     private final String HOST = ""; //petitbonum
@@ -94,9 +94,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         y = findViewById(R.id.y);
         z = findViewById(R.id.z);
 
-        LandOff = findViewById(R.id.LandOffButton);
-        LandOff.setOnTouchListener(this);
-
+        flyTo = findViewById(R.id.autopilote);
+        flyTo.setOnTouchListener(this);
+        takeOff = findViewById(R.id.take_off);
+        landing = findViewById(R.id.landing);
         leftJoystick = findViewById(R.id.joystickLeft);
         rightJoystick = findViewById(R.id.joystickRight);
     }
@@ -153,7 +154,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
             String message ="";
             switch (v.getId()) {
-                case R.id.LandOffButton:
+                case R.id.autopilote:
                     if (x.getText()!=null && y.getText()!=null && z.getText()!=null && !x.getText().toString().isEmpty() && !y.getText().toString().isEmpty() && !z.getText().toString().isEmpty()){
 
                         int valX = Integer.parseInt(x.getText().toString());
