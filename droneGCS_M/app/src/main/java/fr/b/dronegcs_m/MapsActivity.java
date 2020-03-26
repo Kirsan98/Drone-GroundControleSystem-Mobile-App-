@@ -38,6 +38,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private Instruction lastInstruction;
     private int nbMessages = 0;
     private thread2 monThread;
+    private float xSpeed=0;
+    private float ySpeed=0;
+    private float zSpeed=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,13 +71,32 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
     public void onJoystickMoved(float xPercent, float yPercent, int id) {
-        switch (id) {
-            case R.id.joystickLeft:
-                Log.d("Left Joystick", "X percent: " + xPercent + " Y percent: " + yPercent);
-                break;
-            case R.id.joystickRight:
-                Log.d("Right Joystick", "X percent: " + xPercent + "Y percent: " + yPercent);
-                break;
+        try {
+            String message ="";
+            switch (id) {
+                case R.id.joystickLeft:
+                    //Log.d("Left Joystick", "X percent: " + xPercent + " Y percent: " + yPercent);
+                    zSpeed = round(-yPercent,3);
+
+                    break;
+                case R.id.joystickRight:
+                    xSpeed = round(xPercent,3);
+                    ySpeed = round(-yPercent,3);
+                    //Log.d("Right Joystick", "X percent: " + xPercent + " Y percent: " + yPercent);
+                    break;
+            }
+
+            lastInstruction = new Instruction(0,0,0, false,xSpeed, ySpeed, zSpeed, true, false);
+            if (lastInstruction!=null)
+                System.out.println(lastInstruction.getJSON().toString());
+                Toast.makeText(this,lastInstruction.getJSON().toString(), Toast.LENGTH_LONG).show();
+            if (!message.isEmpty() && output!=null){
+                message = lastInstruction.getJSON().toString();
+                output.writeBytes(message);
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -102,15 +124,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         rightJoystick = findViewById(R.id.joystickRight);
     }
 
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
@@ -120,8 +133,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         LatLng flyAreaTopRight = new LatLng(44.8045, -0.6055);
         LatLng flyAreaBotLeft = new LatLng(44.8035, -0.6065);
         LatLng flyAreaBotRight = new LatLng(44.8035, -0.6055);
-
-
 
         MarkerOptions moHOME = new MarkerOptions();
         moHOME.position(homePosition).title("Home");
@@ -154,14 +165,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
             String message ="";
             switch (v.getId()) {
+                case R.id.landing:
+                    lastInstruction = new Instruction(0,0,0, false, 0, 0, 0, true, false);
+                case R.id.take_off:
+                    lastInstruction = new Instruction(0,0,0, false, 0, 0, 0, false, true);
                 case R.id.autopilote:
                     if (x.getText()!=null && y.getText()!=null && z.getText()!=null && !x.getText().toString().isEmpty() && !y.getText().toString().isEmpty() && !z.getText().toString().isEmpty()){
-
                         int valX = Integer.parseInt(x.getText().toString());
                         int valY = Integer.parseInt(y.getText().toString());
                         int valZ = Integer.parseInt(z.getText().toString());
 
-                        lastInstruction = new Instruction(valX,valY,valZ,false,false,false,false, true);
+                        lastInstruction = new Instruction(valX,valY,valZ,true,0,0,0, false, false);
                     }
                     break;
             }
@@ -183,6 +197,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             e.printStackTrace();
         }
         return false;
+    }
+
+    public float round(float n, int nbSignificatif) {
+        String s = String.valueOf(n);
+        int charSignificatif=nbSignificatif+1;
+        if (s.charAt(0)=='-') charSignificatif++;
+        if (s.length()>charSignificatif+1)
+            return Float.parseFloat(s.substring(0,charSignificatif));
+        return n;
     }
 
 }

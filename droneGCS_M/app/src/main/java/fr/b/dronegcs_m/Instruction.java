@@ -4,21 +4,22 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class Instruction {
-    private float x,y,z;
-    private boolean buttonRightPressed, buttonLeftPressed,buttonTopPressed,buttonBotPressed, isNewPosition;
+    private float x,y,z, xSpeed, ySpeed, zSpeed;
+    private boolean toLand, toTakeOff, isNewPosition;
     private int id;
     private static int idMessage=-1;
 
-    public Instruction(float x, float y, float z, boolean buttonRightPressed, boolean buttonLeftPressed, boolean buttonTopPressed, boolean buttonBotPressed, boolean isNewPosition) {
+    public Instruction(float x, float y, float z, boolean isNewPosition, float xSpeed, float ySpeed, float zSpeed, boolean toLand, boolean toTakeOff) {
+        this.id = idMessage+1;
         this.x = x;
         this.y = y;
         this.z = z;
-        this.buttonRightPressed = buttonRightPressed;
-        this.buttonLeftPressed = buttonLeftPressed;
-        this.buttonTopPressed = buttonTopPressed;
-        this.buttonBotPressed = buttonBotPressed;
-        this.id = idMessage+1;
         this.isNewPosition = isNewPosition;
+        this.xSpeed = xSpeed;
+        this.ySpeed = ySpeed;
+        this.zSpeed = zSpeed;
+        this.toLand = toLand;
+        this.toTakeOff = toTakeOff;
     }
 
     JSONObject getJSON() {
@@ -28,11 +29,12 @@ public class Instruction {
             obj.put("x",x);
             obj.put("y",y);
             obj.put("z",z);
-            obj.put("buttonRightPressed",buttonRightPressed);
-            obj.put("buttonLeftPressed",buttonLeftPressed);
-            obj.put("buttonTopPressed",buttonTopPressed);
-            obj.put("buttonBotPressed",buttonBotPressed);
             obj.put("isNewPosition",isNewPosition);
+            obj.put("xSpeed",xSpeed);
+            obj.put("ySpeed",ySpeed);
+            obj.put("zSpeed",zSpeed);
+            obj.put("toLand",toLand);
+            obj.put("toTakeOff",toTakeOff);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -55,11 +57,19 @@ public class Instruction {
         Instruction.idMessage = idMessage;
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public float getX() {
         return x;
     }
 
-    public void setX(int x) {
+    public void setX(float x) {
         this.x = x;
     }
 
@@ -67,7 +77,7 @@ public class Instruction {
         return y;
     }
 
-    public void setY(int y) {
+    public void setY(float y) {
         this.y = y;
     }
 
@@ -75,47 +85,47 @@ public class Instruction {
         return z;
     }
 
-    public void setZ(int z) {
+    public void setZ(float z) {
         this.z = z;
     }
 
-    public boolean isButtonRightPressed() {
-        return buttonRightPressed;
+    public float getxSpeed() {
+        return xSpeed;
     }
 
-    public void setButtonRightPressed(boolean buttonRightPressed) {
-        this.buttonRightPressed = buttonRightPressed;
+    public void setxSpeed(float xSpeed) {
+        this.xSpeed = xSpeed;
     }
 
-    public boolean isButtonLeftPressed() {
-        return buttonLeftPressed;
+    public float getySpeed() {
+        return ySpeed;
     }
 
-    public void setButtonLeftPressed(boolean buttonLeftPressed) {
-        this.buttonLeftPressed = buttonLeftPressed;
+    public void setySpeed(float ySpeed) {
+        this.ySpeed = ySpeed;
     }
 
-    public boolean isButtonTopPressed() {
-        return buttonTopPressed;
+    public float getzSpeed() {
+        return zSpeed;
     }
 
-    public void setButtonTopPressed(boolean buttonTopPressed) {
-        this.buttonTopPressed = buttonTopPressed;
+    public void setzSpeed(float zSpeed) {
+        this.zSpeed = zSpeed;
     }
 
-    public boolean isButtonBotPressed() {
-        return buttonBotPressed;
+    public boolean isToLand() {
+        return toLand;
     }
 
-    public void setButtonBotPressed(boolean buttonBotPressed) {
-        this.buttonBotPressed = buttonBotPressed;
+    public void setToLand(boolean toLand) {
+        this.toLand = toLand;
     }
 
-    public int getId() {
-        return id;
+    public boolean isToTakeOff() {
+        return toTakeOff;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setToTakeOff(boolean toTakeOff) {
+        this.toTakeOff = toTakeOff;
     }
 }
