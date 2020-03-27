@@ -86,9 +86,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     break;
             }
 
-            lastInstruction = new Instruction(0,0,0, false,xSpeed, ySpeed, zSpeed, true, false);
+            lastInstruction = new Instruction(0,0,0, false,xSpeed, ySpeed, zSpeed, false, false);
             if (lastInstruction!=null)
-                System.out.println(lastInstruction.getJSON().toString());
                 Toast.makeText(this,lastInstruction.getJSON().toString(), Toast.LENGTH_LONG).show();
             if (!message.isEmpty() && output!=null){
                 message = lastInstruction.getJSON().toString();
@@ -167,6 +166,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             switch (v.getId()) {
                 case R.id.landing:
                     lastInstruction = new Instruction(0,0,0, false, 0, 0, 0, true, false);
+                    if (lastInstruction!=null)
+                        Toast.makeText(this,lastInstruction.getJSON().toString(), Toast.LENGTH_LONG).show();
                 case R.id.take_off:
                     lastInstruction = new Instruction(0,0,0, false, 0, 0, 0, false, true);
                 case R.id.autopilote:
