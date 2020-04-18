@@ -41,6 +41,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private float xSpeed=0;
     private float ySpeed=0;
     private float zSpeed=0;
+    private float xDrone =0;
+    private float yDrone =0;
+    private final LatLng flyAreaTopLeft = new LatLng(44.8045, -0.6065);
+    private final LatLng flyAreaTopRight = new LatLng(44.8045, -0.6055);
+    private final LatLng flyAreaBotLeft = new LatLng(44.8035, -0.6065);
+    private final LatLng flyAreaBotRight = new LatLng(44.8035, -0.6055);
+    private final double DRONE_X_MAX = 100;
+    private final double DRONE_X_MIN = -100;
+    private final double DRONE_Y_MAX = 100;
+    private final double DRONE_Y_MIN = -100;
+    private MarkerOptions moDRONE;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,17 +86,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             String message ="";
             switch (id) {
                 case R.id.joystickLeft:
-                    //Log.d("Left Joystick", "X percent: " + xPercent + " Y percent: " + yPercent);
                     zSpeed = round(-yPercent,3);
 
                     break;
                 case R.id.joystickRight:
                     xSpeed = round(xPercent,3);
                     ySpeed = round(-yPercent,3);
-                    //Log.d("Right Joystick", "X percent: " + xPercent + " Y percent: " + yPercent);
                     break;
             }
-
             lastInstruction = new Instruction(0,0,0, false,xSpeed, ySpeed, zSpeed, false, false);
             if (lastInstruction!=null)
                 Toast.makeText(this,lastInstruction.getJSON().toString(), Toast.LENGTH_LONG).show();
@@ -123,24 +131,43 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         rightJoystick = findViewById(R.id.joystickRight);
     }
 
+    /**
+     * Convertis des coordonnées x et y cartésiennes en coordonnées sphériques au format LatLng.
+     */
+    private LatLng cartesianToSpherical(int x, int y){
+        double deltaLong = Math.abs(flyAreaTopLeft.longitude - flyAreaBotRight.longitude);
+        double deltaLat = Math.abs(flyAreaTopLeft.latitude - flyAreaBotRight.latitude);
+        double deltaX = Math.abs(DRONE_X_MAX - DRONE_X_MIN);
+        double deltaY = Math.abs(DRONE_Y_MAX -DRONE_Y_MIN);
+
+        double percentXpos = (x - DRONE_X_MIN)/deltaX;
+        double percentYpos = (y - DRONE_Y_MIN)/deltaY;
+
+        double xInLong = flyAreaTopLeft.longitude + percentXpos * deltaLong;
+        double yInLat = flyAreaTopLeft.latitude - percentYpos * deltaLong;
+
+        System.out.println("x=" + x + " percentXpos=" + percentXpos + " yInLat=" + yInLat + " ");
+        return new LatLng(yInLat, xInLong);
+    }
+
+    /**
+     * Charge et dessine la google Map et les différents objets qui y sont représentés.
+     */
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        LatLng homePosition = new LatLng(44.804, -0.606);
-        LatLng dronePosition = new LatLng(44.8037, -0.6057);
-        LatLng flyAreaTopLeft = new LatLng(44.8045, -0.6065);
-        LatLng flyAreaTopRight = new LatLng(44.8045, -0.6055);
-        LatLng flyAreaBotLeft = new LatLng(44.8035, -0.6065);
-        LatLng flyAreaBotRight = new LatLng(44.8035, -0.6055);
+        LatLng homePosition = cartesianToSpherical(0,0);
+        LatLng dronePosition = cartesianToSpherical(-50,0);//new LatLng(44.8037, -0.6057);
 
         MarkerOptions moHOME = new MarkerOptions();
         moHOME.position(homePosition).title("Home");
         mMap.addMarker(moHOME);
 
-        MarkerOptions moDRONE = new MarkerOptions();
+        moDRONE = new MarkerOptions();
         moDRONE.position(dronePosition).title("Drone");
         moDRONE.icon(BitmapDescriptorFactory.fromResource(R.drawable.drone));
         mMap.addMarker(moDRONE);
+
 
         PolygonOptions rectOptions = new PolygonOptions();
         rectOptions.fillColor(Color.argb(80,0,200,100));
