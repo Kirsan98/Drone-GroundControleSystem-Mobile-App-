@@ -11,6 +11,9 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 
+/**
+ * Gère le comportement de l'objet Joystick de la vue.
+ */
 public class JoystickView extends SurfaceView implements SurfaceHolder.Callback, View.OnTouchListener
 {
     private float centerX;

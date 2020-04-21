@@ -16,8 +16,9 @@ public class thread2 extends Thread{
     private DataInputStream in;
     DataOutputStream out;
 
-
-
+    /**
+     * Thread de connexion à l'UC
+     */
     public void run() {
         try {
             Socket gcs = new Socket("2001:660:6101:800:103::5", 7777);

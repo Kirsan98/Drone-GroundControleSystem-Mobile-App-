@@ -41,7 +41,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private float xSpeed=0;
     private float ySpeed=0;
     private float zSpeed=0;
-    private float xDrone =0;
+    private float xDrone =-50;
     private float yDrone =0;
     private final LatLng flyAreaTopLeft = new LatLng(44.8045, -0.6065);
     private final LatLng flyAreaTopRight = new LatLng(44.8045, -0.6055);
@@ -73,6 +73,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
         */
     }
+
+    /**
+     * Connecte la GCS à l'UC.
+     * @throws IOException
+     */
     private void connection() throws IOException {
         socket= new Socket(HOST, 7778);
         output = new DataOutputStream((socket.getOutputStream()));
@@ -81,13 +86,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
 
+    /**
+     * Envoie une nouvelle instruction à chaque fois que le joystick est déplacé.
+     * @param xPercent
+     * @param yPercent
+     * @param id
+     */
     public void onJoystickMoved(float xPercent, float yPercent, int id) {
         try {
             String message ="";
             switch (id) {
                 case R.id.joystickLeft:
                     zSpeed = round(-yPercent,3);
-
                     break;
                 case R.id.joystickRight:
                     xSpeed = round(xPercent,3);
@@ -101,12 +111,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 message = lastInstruction.getJSON().toString();
                 output.writeBytes(message);
             }
-
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
+    /**
+     * Ferme la connexion lorsque l'application est tué ou passe en arrière plan.
+     */
     @Override
     protected void onDestroy(){
         super.onDestroy();
@@ -117,12 +129,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
+    /**
+     * Au chargement fait le lien entre l'affichage et les objets Buttons.
+     */
     private void linkViewObjects() {
-        // Position
         x = findViewById(R.id.x);
         y = findViewById(R.id.y);
         z = findViewById(R.id.z);
-
         flyTo = findViewById(R.id.autopilote);
         flyTo.setOnTouchListener(this);
         takeOff = findViewById(R.id.take_off);
@@ -132,9 +145,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     /**
-     * Convertis des coordonnées x et y cartésiennes en coordonnées sphériques au format LatLng.
+     * Convertis des coordonnées x et y cartésiennes fournies par la maquette en coordonnées sphériques au format LatLng.
      */
-    private LatLng cartesianToSpherical(int x, int y){
+    private LatLng cartesianToSpherical(float x, float y){
         double deltaLong = Math.abs(flyAreaTopLeft.longitude - flyAreaBotRight.longitude);
         double deltaLat = Math.abs(flyAreaTopLeft.latitude - flyAreaBotRight.latitude);
         double deltaX = Math.abs(DRONE_X_MAX - DRONE_X_MIN);
@@ -157,7 +170,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         LatLng homePosition = cartesianToSpherical(0,0);
-        LatLng dronePosition = cartesianToSpherical(-50,0);//new LatLng(44.8037, -0.6057);
+        LatLng dronePosition = cartesianToSpherical(xDrone,yDrone);
 
         MarkerOptions moHOME = new MarkerOptions();
         moHOME.position(homePosition).title("Home");
@@ -185,6 +198,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
     }
 
+    /**
+     * Gestion des evenements lors d'un click sur un bouton.
+     * @param v
+     * @param event
+     * @return
+     */
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         try {
@@ -210,22 +229,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
             if (lastInstruction!=null)
                 Toast.makeText(this,lastInstruction.getJSON().toString(), Toast.LENGTH_LONG).show();
-
             if (!message.isEmpty() && output!=null){
                 message = lastInstruction.getJSON().toString();
                 output.writeBytes(message);
                 Toast.makeText(this,"Coordonnées envoyées", Toast.LENGTH_SHORT).show();
             }
-            else {
-                //Toast.makeText(this,"connexion impossible", Toast.LENGTH_SHORT).show();
-            }
-
-
         } catch (IOException e) {
             e.printStackTrace();
         }
         return false;
     }
+
 
     public float round(float n, int nbSignificatif) {
         String s = String.valueOf(n);
